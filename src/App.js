@@ -8,9 +8,6 @@ function App() {
     <div className="App">
       <Header />
       <MealsSummary />
-      <Input
-      label="Amount"
-      />
     </div>
   );
 }
