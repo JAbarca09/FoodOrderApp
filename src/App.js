@@ -1,13 +1,7 @@
-import './App.css';
-import Header from './components/Header';
-import MealsSummary from './components/MealsSummary';
-import Input from './components/UI/Input';
-
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <Header />
-      <MealsSummary />
+    <div>
+      <h2>Let's get started!</h2>
     </div>
   );
 }
