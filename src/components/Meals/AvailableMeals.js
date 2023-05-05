@@ -10,24 +10,22 @@ const AvailableMeals = () => {
 
   useEffect(() => {
     const fetchMeals = async () => {
-      let mealsArr = [];
+      const loadedMeals = [];
       const response = await fetch(
         "https://react-test-project-7e7be-default-rtdb.firebaseio.com/meals.json"
       );
       const data = await response.json();
 
       // TODO iterate through an object with objects inside of it and push elements to an array and map through it!
-      for (let i = 0; i < Object.keys(data).length; i++) {
-        let mealObj = {
-          key: `m${i + 1}`,
-          id: `m${i + 1}`,
-          name: data[`m${i + 1}`].name,
-          description: data[`m${i + 1}`].description,
-          price: data[`m${i + 1}`].price,
-        };
-        mealsArr.push(mealObj);
+      for (const key in data) {
+        loadedMeals.push({
+          id: key,
+          name: data[key].name,
+          description: data[key].description,
+          price: data[key].price,
+        });
       }
-      setMeals(mealsArr);
+      setMeals(loadedMeals);
     };
 
     fetchMeals();
