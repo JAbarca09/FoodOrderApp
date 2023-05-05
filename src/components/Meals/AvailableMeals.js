@@ -1,37 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import classes from "./AvailableMeals.module.css";
 import Card from "../UI/Card";
 import MealItem from "./MealItem/MealItem";
 
-const DUMMY_MEALS = [
-  {
-    id: "m1",
-    name: "Sushi",
-    description: "Finest fish and veggies",
-    price: 22.99,
-  },
-  {
-    id: "m2",
-    name: "Schnitzel",
-    description: "A german specialty!",
-    price: 16.5,
-  },
-  {
-    id: "m3",
-    name: "Barbecue Burger",
-    description: "American, raw, meaty",
-    price: 12.99,
-  },
-  {
-    id: "m4",
-    name: "Green Bowl",
-    description: "Healthy...and green...",
-    price: 18.99,
-  },
-];
+// TODO Fetch the meals from firebase and map through the data to display meals!
 
 const AvailableMeals = () => {
-  const mealsList = DUMMY_MEALS.map((meal) => (
+  const [meals, setMeals] = useState([]);
+
+  useEffect(() => {
+    const fetchMeals = async () => {
+      let mealsArr = [];
+      const response = await fetch(
+        "https://react-test-project-7e7be-default-rtdb.firebaseio.com/meals.json"
+      );
+      const data = await response.json();
+
+      // TODO iterate through an object with objects inside of it and push elements to an array and map through it!
+      for (let i = 0; i < Object.keys(data).length; i++) {
+        let mealObj = {
+          key: `m${i + 1}`,
+          id: `m${i + 1}`,
+          name: data[`m${i + 1}`].name,
+          description: data[`m${i + 1}`].description,
+          price: data[`m${i + 1}`].price,
+        };
+        mealsArr.push(mealObj);
+      }
+      setMeals(mealsArr);
+    };
+
+    fetchMeals();
+  }, []);
+
+  const mealsList = meals.map((meal) => (
     <MealItem
       key={meal.id}
       id={meal.id}
