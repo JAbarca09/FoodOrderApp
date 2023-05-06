@@ -8,26 +8,38 @@ import MealItem from "./MealItem/MealItem";
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchMeals = async () => {
       const loadedMeals = [];
-      const response = await fetch(
-        "https://react-test-project-7e7be-default-rtdb.firebaseio.com/meals.json"
-      );
-      const data = await response.json();
 
-      // TODO iterate through an object with objects inside of it and push elements to an array and map through it!
-      for (const key in data) {
-        loadedMeals.push({
-          id: key,
-          name: data[key].name,
-          description: data[key].description,
-          price: data[key].price,
-        });
+      try {
+        const response = await fetch(
+          "https://react-test-project-7e7be-default-rtdb.firebaseio.com/meals.json"
+        );
+
+        if (!response.ok) {
+          throw new Error("Something went wrong!");
+        }
+
+        const data = await response.json();
+
+        // TODO iterate through an object with objects inside of it and push elements to an array and map through it!
+        for (const key in data) {
+          loadedMeals.push({
+            id: key,
+            name: data[key].name,
+            description: data[key].description,
+            price: data[key].price,
+          });
+        }
+        setMeals(loadedMeals);
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+        setError(error.message);
       }
-      setMeals(loadedMeals);
-      setIsLoading(false);
     };
 
     fetchMeals();
@@ -43,19 +55,23 @@ const AvailableMeals = () => {
     />
   ));
 
+  let content = <p>Found no meals.</p>;
+    
+  if(mealsList.length > 0) {
+    content = <Card><ul>{mealsList}</ul></Card>;
+  }
+
+  if (error) {
+    content = <p className={classes.MealsLoading}>{error}</p>;
+  }
+
   if (isLoading) {
-    return (
-      <section className={classes.MealsLoading}>
-        <p>Loading...</p>
-      </section>
-    );
+    content = <p className={classes.MealsLoading}>Loading...</p>;
   }
 
   return (
     <section className={classes.meals}>
-      <Card>
-        <ul>{mealsList}</ul>
-      </Card>
+      {content}
     </section>
   );
 };
