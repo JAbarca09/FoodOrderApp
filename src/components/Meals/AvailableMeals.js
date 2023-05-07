@@ -13,6 +13,7 @@ const AvailableMeals = () => {
   useEffect(() => {
     const fetchMeals = async () => {
       const loadedMeals = [];
+
       const response = await fetch(
         "https://react-test-project-7e7be-default-rtdb.firebaseio.com/meals.json"
       );
@@ -32,8 +33,6 @@ const AvailableMeals = () => {
           price: data[key].price,
         });
       }
-      setMeals(loadedMeals);
-      setIsLoading(false);
     };
 
     fetchMeals().catch((error) => {
@@ -52,12 +51,18 @@ const AvailableMeals = () => {
     />
   ));
 
+  let content = <p>Found no meals.</p>;
+    
+  if(mealsList.length > 0) {
+    content = <Card><ul>{mealsList}</ul></Card>;
+  }
+
+  if (error) {
+    content = <p className={classes.MealsLoading}>{error}</p>;
+  }
+
   if (isLoading) {
-    return (
-      <section className={classes.MealsLoading}>
-        <p>Loading...</p>
-      </section>
-    );
+    content = <p className={classes.MealsLoading}>Loading...</p>;
   }
 
   if (httpError) {
@@ -70,9 +75,7 @@ const AvailableMeals = () => {
 
   return (
     <section className={classes.meals}>
-      <Card>
-        <ul>{mealsList}</ul>
-      </Card>
+      {content}
     </section>
   );
 };
