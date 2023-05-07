@@ -13,6 +13,7 @@ const AvailableMeals = () => {
   useEffect(() => {
     const fetchMeals = async () => {
       const loadedMeals = [];
+
       const response = await fetch(
         "https://react-test-project-7e7be-default-rtdb.firebaseio.com/meals.json"
       );
@@ -36,7 +37,7 @@ const AvailableMeals = () => {
       setIsLoading(false);
     };
 
-    fetchMeals().catch(error => {
+    fetchMeals().catch((error) => {
       setIsLoading(false);
       setHttpError(error.message);
     });
@@ -70,9 +71,7 @@ const AvailableMeals = () => {
 
   return (
     <section className={classes.meals}>
-      <Card>
-        <ul>{mealsList}</ul>
-      </Card>
+      {content}
     </section>
   );
 };
