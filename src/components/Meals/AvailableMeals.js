@@ -71,7 +71,9 @@ const AvailableMeals = () => {
 
   return (
     <section className={classes.meals}>
-      {content}
+      <Card>
+        {mealsList}
+      </Card>
     </section>
   );
 };
